@@ -1,0 +1,31 @@
+services:
+  frontend:
+    build: ./client
+    container_name: hoteldelluna-frontend
+    ports:
+      - "5173:4173"
+    restart: always
+
+  backend:
+    build: ./server
+    container_name: hoteldelluna-backend
+    ports:
+      - "5000:5000"
+    restart: always
+    depends_on:
+      - db
+    env_file:
+      - ./server/.env
+
+  db:
+    image: postgres:16
+    container_name: hoteldelluna-db
+    env_file:
+      - ./server/.env
+    ports:
+      - "5433:5432"
+    volumes:
+      - hoteldelluna_db_data:/var/lib/postgresql/data
+
+volumes:
+  hoteldelluna_db_data:
